@@ -23,16 +23,21 @@ if (shouldInstallCurl.toLowerCase() === 'y') {
     console.log('🔽 Skipping curl installation');
 }
 
-// pm2
+// nvm
 await sleep(1000);
-let shouldInstallPM2 = await question('Do you want to install pm2? [y/n] ');
-if (shouldInstallPM2.toLowerCase() === 'y') {
-    console.log('Installing pm2');
-    await $`sudo npm install pm2@latest -g`
-    await $`pm2 --version`
-    console.log("✅ PM2 install successfull");
-} else {
-    console.log('🔽 Skipping pm2 installation');
+let shouldInstallNvm = await question('Do you want to install nvm? [y/n] ');
+if (shouldInstallNvm.toLowerCase() === 'y') {
+    console.log('Installing nvm');
+    await $`curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash`
+    await $`source ~/.bashrc`
+    let version = await question('Enter node version to install: ');
+    if(version){
+        await $`nvm install ${version}`
+    }else{
+        await $`nvm install --lts`
+    }
+}else{
+    console.log('🔽 Skipping nvm installation');
 }
 
 // yarn
@@ -40,13 +45,13 @@ await sleep(1000);
 let shouldInstallYarn = await question('Do you want to install yarn? [y/n] ');
 if (shouldInstallYarn.toLowerCase() === 'y') {
     console.log('Installing yarn');
-    await $`sudo npm install -g yarn`
+    await $`npm install -g yarn`
     await $`yarn -v`
     console.log("✅ Yarn install successfull");
 } else {
     console.log('🔽 Skipping yarn installation');
 }
-// git
+
 await sleep(1000);
 let shouldInstallGit = await question('Do you want to install git? [y/n] ');
 if (shouldInstallGit.toLowerCase() === 'y') {
@@ -60,7 +65,24 @@ if (shouldInstallGit.toLowerCase() === 'y') {
     console.log('🔽 Skipping git installation');
 }
 
-nginx
+
+//openssh-server
+await sleep(1000);
+let shouldInstallOpenSSH = await question('Do you want to install openssh-server? [y/n] ');
+if (shouldInstallOpenSSH.toLowerCase() === 'y') {
+    console.log('Installing openssh-server');
+    await $`sudo apt install openssh-server`
+    await $`sudo systemctl enable ssh`
+    await $`sudo systemctl start ssh`
+    await $`sudo systemctl status ssh`
+    console.log("✅ OpenSSH install successfull");
+
+} else {
+    console.log('🔽 Skipping openssh-server installation');
+}
+
+
+// nginx
 await sleep(1000);
 let shouldInstallNginx = await question('Do you want to install nginx? [y/n] ');
 if (shouldInstallNginx.toLowerCase() === 'y') {
@@ -75,14 +97,14 @@ if (shouldInstallNginx.toLowerCase() === 'y') {
 }
 
 
-// ufw 
+//ufw 
 await sleep(1000);
 let shouldInstallUFW = await question('Do you want to install ufw? [y/n] ');
 if (shouldInstallUFW.toLowerCase() === 'y') {
     console.log('Installing and configuring ufw');
     await $`sudo apt install ufw`
     await $`sudo ufw allow "Nginx Full"`
-    await $`sudo ufw allow OpenSSH`
+    await $`ufw allow OpenSSH`
     await $`sudo ufw allow 80/tcp`
     await $`sudo ufw allow 443/tcp`
     await $`sudo ufw allow 22/tcp`
@@ -98,13 +120,7 @@ if (shouldInstallUFW.toLowerCase() === 'y') {
 // docker 
 let shouldInstallDocker = await question('Do you want to install docker? [y/n] ');
 if (shouldInstallDocker.toLowerCase() === 'y') {
-    await $`sudo apt install apt-transport-https ca-certificates curl software-properties-common`
-    await $`curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -`
-    await $`sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"`
-    await $`sudo apt update`
-    await $`apt-cache policy docker-ce`
-    await $`sudo apt install docker-ce`
-    await $`sudo systemctl status docker`
+    await $`zx https://raw.githubusercontent.com/foyzulkarim/linux-playbook-javascript/main/docker.mjs`
 } else {
     console.log('Skipping docker installation');
 }
@@ -112,9 +128,7 @@ if (shouldInstallDocker.toLowerCase() === 'y') {
 // docker-compose
 let shouldInstallDockerCompose = await question('Do you want to install docker-compose? [y/n] ');
 if (shouldInstallDockerCompose.toLowerCase() === 'y') {
-    await $`sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose`
-    await $`sudo chmod +x /usr/local/bin/docker-compose`
-    await $`sudo docker-compose --version`
+    await $`zx https://raw.githubusercontent.com/foyzulkarim/linux-playbook-javascript/main/docker-compose.mjs`
 } else {
     console.log('Skipping docker-compose installation');
 }
