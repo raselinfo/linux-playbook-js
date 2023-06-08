@@ -1,1 +1,1 @@
-[Download the script.mjs file with wget](https://raw.githubusercontent.com/raselinfo/linux-playbook-js/main/script.mjs)
+😃 [Download the script.mjs file with wget](https://raw.githubusercontent.com/raselinfo/linux-playbook-js/main/script.mjs)
