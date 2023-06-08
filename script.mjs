@@ -60,7 +60,7 @@ if (shouldInstallGit.toLowerCase() === 'y') {
     console.log('🔽 Skipping git installation');
 }
 
-nginx
+// nginx
 await sleep(1000);
 let shouldInstallNginx = await question('Do you want to install nginx? [y/n] ');
 if (shouldInstallNginx.toLowerCase() === 'y') {
